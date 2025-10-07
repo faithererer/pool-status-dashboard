@@ -36,3 +36,16 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+
+# log
+logs
+
+# web app
+web/node_modules/
+
+# docs
+/docs/
+
+# 数据库
+/data/
