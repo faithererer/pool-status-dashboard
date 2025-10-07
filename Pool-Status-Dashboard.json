@@ -1,0 +1,207 @@
+{
+  "openapi": "3.0.1",
+  "info": {},
+  "paths": {
+    "/api/pools": {
+      "summary": "创建号池",
+      "description": "/api/pools",
+      "post": {
+        "summary": "创建号池",
+        "description": "/api/pools",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "号池ID ",
+                    "example": "15597"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "号池名称 ",
+                    "example": ""
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "号池描述 ",
+                    "example": ""
+                  },
+                  "dataSourceClass": {
+                    "type": "string",
+                    "description": "数据源服务类名 ",
+                    "example": ""
+                  },
+                  "dataSourceConfig": {
+                    "type": "string",
+                    "description": "数据源配置 ",
+                    "example": "{key=value}"
+                  },
+                  "updateFrequency": {
+                    "type": "string",
+                    "description": "更新频率(秒) ",
+                    "example": "17831"
+                  },
+                  "displayFields": {
+                    "type": "string",
+                    "description": "显示字段配置 ",
+                    "example": "{key=value}"
+                  },
+                  "displayStrategy": {
+                    "type": "string",
+                    "description": "显示策略 ",
+                    "example": ""
+                  },
+                  "enabled": {
+                    "type": "string",
+                    "description": "是否启用 ",
+                    "example": "false"
+                  },
+                  "lastUpdateTime": {
+                    "type": "string",
+                    "description": "最后更新时间 ",
+                    "example": "6556"
+                  },
+                  "lastUpdateStatus": {
+                    "type": "string",
+                    "description": "最后更新状态 ",
+                    "example": ""
+                  },
+                  "lastErrorMessage": {
+                    "type": "string",
+                    "description": "最后更新错误信息 ",
+                    "example": ""
+                  },
+                  "createTime": {
+                    "type": "string",
+                    "description": "创建时间 ",
+                    "example": "2025-10-07 11:53:41"
+                  },
+                  "updateTime": {
+                    "type": "string",
+                    "description": "更新时间 ",
+                    "example": "2025-10-07 11:53:41"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/pools/{id}": {
+      "summary": "删除号池",
+      "description": "/api/pools/{id}",
+      "delete": {
+        "summary": "删除号池",
+        "description": "/api/pools/{id}",
+        "parameters": []
+      }
+    },
+    "/api/pools/batch": {
+      "summary": "批量删除号池",
+      "description": "/api/pools/batch",
+      "delete": {
+        "summary": "批量删除号池",
+        "description": "/api/pools/batch",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "description": "",
+                "items": {
+                  "type": "string",
+                  "description": "",
+                  "example": "18930"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/pools/{id}/toggle": {
+      "summary": "启用/禁用号池",
+      "description": "/api/pools/{id}/toggle",
+      "put": {
+        "summary": "启用/禁用号池",
+        "description": "/api/pools/{id}/toggle",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "string",
+                    "description": ""
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/pools/enabled": {
+      "summary": "获取所有启用的号池列表",
+      "description": "/api/pools/enabled",
+      "get": {
+        "summary": "获取所有启用的号池列表",
+        "description": "/api/pools/enabled",
+        "parameters": []
+      }
+    },
+    "/api/pools/public": {
+      "summary": "获取公开显示的号池列表",
+      "description": "/api/pools/public",
+      "get": {
+        "summary": "获取公开显示的号池列表",
+        "description": "/api/pools/public",
+        "parameters": []
+      }
+    },
+    "/api/pools/strategy/{displayStrategy}": {
+      "summary": "根据显示策略获取号池列表",
+      "description": "/api/pools/strategy/{displayStrategy}",
+      "get": {
+        "summary": "根据显示策略获取号池列表",
+        "description": "/api/pools/strategy/{displayStrategy}",
+        "parameters": []
+      }
+    },
+    "/api/pools/check-name": {
+      "summary": "检查号池名称是否存在",
+      "description": "/api/pools/check-name",
+      "get": {
+        "summary": "检查号池名称是否存在",
+        "description": "/api/pools/check-name",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "excludeId",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

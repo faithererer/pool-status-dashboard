@@ -1,0 +1,359 @@
+
+@use "sass:color";
+@use './variables.scss' as *;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+// 基础样式
+body {
+  font-family: $font-family;
+  background: $bg-primary;
+  color: $gray-50;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+// 滚动条样式
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: $gray-800;
+  border-radius: $radius-md;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $gray-600;
+  border-radius: $radius-md;
+  
+  &:hover {
+    background: $gray-500;
+  }
+}
+
+// 通用工具类
+.container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: $spacing-5;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+// 卡片样式
+.card {
+  background: $bg-card;
+  backdrop-filter: blur(10px);
+  border: 1px solid $border-color;
+  border-radius: $radius-xl;
+  padding: $spacing-5;
+  transition: all $transition-normal;
+  
+  &:hover {
+    border-color: $border-hover;
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+// 按钮样式
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-3 $spacing-5;
+  border: none;
+  border-radius: $radius-lg;
+  font-weight: $font-weight-medium;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all $transition-normal;
+  font-size: $font-size-sm;
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  // 主要按钮
+  &--primary {
+    background: $primary-gradient;
+    color: $white;
+    
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: $shadow-glow;
+    }
+  }
+  
+  // 次要按钮
+  &--secondary {
+    background: $bg-overlay;
+    border: 1px solid $border-color;
+    color: $gray-50;
+    
+    &:hover:not(:disabled) {
+      background: $bg-card-hover;
+      border-color: $border-active;
+    }
+  }
+  
+  // 危险按钮
+  // 危险按钮
+  &--danger {
+    background: $danger-color;
+    color: $white;
+
+    &:hover:not(:disabled) {
+      // 替换 darken($danger-color, 10%) 为新语法
+      background: color.adjust($danger-color, $lightness: -10%);
+      // 或者使用 color.scale，两者效果略有不同
+      // background: color.scale($danger-color, $lightness: -10%);
+    }
+  }
+}
+
+// 输入框样式
+.input {
+  width: 100%;
+  padding: $spacing-3 $spacing-4;
+  background: $bg-overlay;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  color: $gray-50;
+  font-size: $font-size-sm;
+  transition: all $transition-normal;
+  
+  &:focus {
+    outline: none;
+    border-color: $border-active;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+  
+  &::placeholder {
+    color: $gray-400;
+  }
+}
+
+// 状态徽章
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-1 $spacing-3;
+  border-radius: $radius-md;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  
+  &--success {
+    background: rgba(34, 197, 94, 0.2);
+    color: $success-color;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+  }
+  
+  &--warning {
+    background: rgba(251, 191, 36, 0.2);
+    color: $warning-color;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+  }
+  
+  &--danger {
+    background: rgba(239, 68, 68, 0.2);
+    color: $danger-color;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+  
+  &--info {
+    background: rgba(6, 182, 212, 0.2);
+    color: $info-color;
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+}
+
+// 加载动画
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid $gray-600;
+  border-radius: 50%;
+  border-top-color: $primary-color;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// 淡入动画
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 发光动画
+.glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.5));
+  }
+  to {
+    filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.8));
+  }
+}
+
+// 响应式工具类
+@media (max-width: $breakpoint-md) {
+  .container {
+    padding: $spacing-4;
+  }
+  
+  .card {
+    padding: $spacing-4;
+  }
+}
+
+// 网格布局
+.grid {
+  display: grid;
+  gap: $spacing-5;
+  
+  &--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  &--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  &--auto {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  
+  @media (max-width: $breakpoint-md) {
+    &--2,
+    &--3 {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// Flex 布局
+.flex {
+  display: flex;
+  
+  &--center {
+    align-items: center;
+    justify-content: center;
+  }
+  
+  &--between {
+    justify-content: space-between;
+  }
+  
+  &--column {
+    flex-direction: column;
+  }
+  
+  &--wrap {
+    flex-wrap: wrap;
+  }
+}
+
+// 文本工具类
+.text {
+  &--center {
+    text-align: center;
+  }
+  
+  &--right {
+    text-align: right;
+  }
+  
+  &--xs {
+    font-size: $font-size-xs;
+  }
+  
+  &--sm {
+    font-size: $font-size-sm;
+  }
+  
+  &--lg {
+    font-size: $font-size-lg;
+  }
+  
+  &--xl {
+    font-size: $font-size-xl;
+  }
+  
+  &--2xl {
+    font-size: $font-size-2xl;
+  }
+  
+  &--bold {
+    font-weight: $font-weight-bold;
+  }
+  
+  &--medium {
+    font-weight: $font-weight-medium;
+  }
+}
+
+// 间距工具类
+.m {
+  &-1 { margin: $spacing-1; }
+  &-2 { margin: $spacing-2; }
+  &-3 { margin: $spacing-3; }
+  &-4 { margin: $spacing-4; }
+  &-5 { margin: $spacing-5; }
+  &-6 { margin: $spacing-6; }
+}
+
+.p {
+  &-1 { padding: $spacing-1; }
+  &-2 { padding: $spacing-2; }
+  &-3 { padding: $spacing-3; }
+  &-4 { padding: $spacing-4; }
+  &-5 { padding: $spacing-5; }
+  &-6 { padding: $spacing-6; }
+}
+
+.mb {
+  &-1 { margin-bottom: $spacing-1; }
+  &-2 { margin-bottom: $spacing-2; }
+  &-3 { margin-bottom: $spacing-3; }
+  &-4 { margin-bottom: $spacing-4; }
+  &-5 { margin-bottom: $spacing-5; }
+  &-6 { margin-bottom: $spacing-6; }
+}
+
+.mt {
+  &-1 { margin-top: $spacing-1; }
+  &-2 { margin-top: $spacing-2; }
+  &-3 { margin-top: $spacing-3; }
+  &-4 { margin-top: $spacing-4; }
+  &-5 { margin-top: $spacing-5; }
+  &-6 { margin-top: $spacing-6; }
+}

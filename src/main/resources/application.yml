@@ -1,0 +1,103 @@
+# 服务器配置
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+# Spring配置
+spring:
+  application:
+    name: pool-status-dashboard
+  
+  # 数据源配置 (SQLite)
+  datasource:
+    url: ${DATABASE_URL:jdbc:sqlite:./data/pool_monitor.db}
+    driver-class-name: org.sqlite.JDBC
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  # Jackson配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+
+# MyBatis Plus配置
+mybatis-plus:
+
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      id-type: auto
+
+# 应用配置
+app:
+  # 数据保留策略
+  data-retention-days: ${DATA_RETENTION_DAYS:30}
+  
+  # 数据采集配置
+  collection:
+    default-frequency: ${DEFAULT_FREQUENCY:60}
+    timeout: ${COLLECTION_TIMEOUT:30}
+    max-concurrent: ${MAX_CONCURRENT:10}
+  
+  # 缓存配置
+  cache:
+    ttl-seconds: ${CACHE_TTL:300}
+    max-size: ${CACHE_MAX_SIZE:1000}
+  
+  # JWT配置
+  jwt:
+    secret: ${JWT_SECRET:pool-status-dashboard-secret-key-for-jwt-token-generation-must-be-at-least-256-bits}
+    expiration: ${JWT_EXPIRATION:24}
+  
+  # 认证配置
+  auth:
+    admin:
+      username: ${ADMIN_USERNAME:admin}
+      # 默认密码: password123 (BCrypt加密)
+      password: ${ADMIN_PASSWORD:$2a$10$4NICZiQqeBgD7nL7fUC7WO.KTk23zk7g5rLUgTQ1owNKaE.prOHZy}
+
+# 日志配置
+logging:
+  level:
+    com.zjc: ${LOG_LEVEL:DEBUG}
+    org.springframework: WARN
+    com.baomidou.mybatisplus: INFO
+    com.zjc.task.PoolDataUpdateTask: INFO
+  file:
+    name: ${LOG_FILE:./logs/pool-monitor.log}
+  logback:
+    rollingpolicy:
+      max-file-size: 100MB
+      max-history: 7
+      total-size-cap: 1GB
+
+# Actuator配置 (健康检查)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+  info:
+    env:
+      enabled: true
