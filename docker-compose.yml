@@ -2,15 +2,12 @@ version: '3.8'
 
 services:
   pool-status-dashboard:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: ghcr.io/your-github-username/pool-status-dashboard:latest
+    image: ghcr.io/faithererer/pool-status-dashboard:latest
     container_name: pool-status-dashboard
     ports:
-      - "8080:8080"
+      - "38080:8080"
     volumes:
       - ./data:/data
     restart: unless-stopped
-    # environment:
-    #   - SPRING_DATASOURCE_URL=jdbc:sqlite:/data/pool-status.db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:sqlite:/data/pool-status.db

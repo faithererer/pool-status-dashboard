@@ -15,7 +15,7 @@ spring:
   
   # 数据源配置 (SQLite)
   datasource:
-    url: ${DATABASE_URL:jdbc:sqlite:./data/pool_monitor.db}
+    url: ${DATABASE_URL:jdbc:sqlite:/data/pool_monitor.db}
     driver-class-name: org.sqlite.JDBC
     hikari:
       maximum-pool-size: 5
@@ -81,7 +81,7 @@ logging:
     com.baomidou.mybatisplus: INFO
     com.zjc.task.PoolDataUpdateTask: INFO
   file:
-    name: ${LOG_FILE:./logs/pool-monitor.log}
+    name: ${LOG_FILE:/data/logs/pool-monitor.log}
   logback:
     rollingpolicy:
       max-file-size: 100MB
