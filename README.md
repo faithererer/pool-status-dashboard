@@ -92,7 +92,6 @@ graph TB
     subgraph "用户自定义数据源服务"
         DS1[数据源服务A<br/>用户实现]
         DS2[数据源服务B<br/>用户实现]
-        DS3[数据源服务C<br/>用户实现]
     end
     
     subgraph "号池监控系统"
