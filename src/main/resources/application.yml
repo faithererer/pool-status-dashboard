@@ -13,6 +13,10 @@ spring:
   application:
     name: pool-status-dashboard
   
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  
   # 数据源配置 (SQLite)
   datasource:
     url: ${DATABASE_URL:jdbc:sqlite:/data/pool_monitor.db}
