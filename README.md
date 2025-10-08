@@ -85,3 +85,54 @@
 - [ ] **通用**: 编写关于如何配置和使用系统的用户文档。
 - [ ] **通用**: 实现合适的日志记录策略。
 - [ ] **通用**: 为生产环境打包应用程序（例如，使用 Docker）。
+
+# 🏗️架构
+```mermaid
+graph TB
+    subgraph "用户自定义数据源服务"
+        DS1[数据源服务A<br/>用户实现]
+        DS2[数据源服务B<br/>用户实现]
+        DS3[数据源服务C<br/>用户实现]
+    end
+    
+    subgraph "号池监控系统"
+        subgraph "前端层"
+            UI[Vue3 前端界面]
+            DASH[监控面板]
+            MGMT[管理面板]
+        end
+        
+        subgraph "后端层"
+            API[REST API层]
+            BIZ[业务逻辑层]
+            REFLECT[反射调用器]
+            DATA[MyBatis Plus数据层]
+        end
+        
+        subgraph "数据层"
+            DB[(SQLite数据库)]
+        end
+        
+        subgraph "任务调度"
+            SCHED[定时任务调度器]
+            UPDATE[数据更新器]
+        end
+    end
+    
+    UI --> API
+    DASH --> API
+    MGMT --> API
+    
+    API --> BIZ
+    BIZ --> DATA
+    DATA --> DB
+    
+    SCHED --> UPDATE
+    UPDATE --> REFLECT
+    REFLECT --> DS1
+    REFLECT --> DS2
+    REFLECT --> DS3
+    
+    UPDATE --> BIZ
+
+```
