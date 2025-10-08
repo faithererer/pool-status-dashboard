@@ -1,7 +1,7 @@
 package com.zjc.datasource;
 
 import com.zjc.dto.PoolStatusDTO;
-import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.json.JSONException;
 
 /**
  * 号池数据源服务接口
