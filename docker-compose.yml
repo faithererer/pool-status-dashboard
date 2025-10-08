@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  pool-status-dashboard:
+    image: ghcr.io/your-github-username/pool-status-dashboard:latest
+    container_name: pool-status-dashboard
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    # environment:
+    #   - SPRING_DATASOURCE_URL=jdbc:mysql://your-db-host:3306/your-db-name
+    #   - SPRING_DATASOURCE_USERNAME=your-db-user
+    #   - SPRING_DATASOURCE_PASSWORD=your-db-password
