@@ -66,6 +66,13 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
+        <!-- JSON library -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20231013</version>
+        </dependency>
+
         <!-- Lombok (简化代码) -->
         <dependency>
             <groupId>org.projectlombok</groupId>
