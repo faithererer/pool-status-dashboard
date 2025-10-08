@@ -31,9 +31,9 @@
         <div class="pool-pressure">
           <div
             class="pressure-value"
-            :style="{ color: getPressureColor(pool.pressure) }"
+            :style="{ color: getPressureColor(pool.latestStatus ? pool.latestStatus.pressure : 0) }"
           >
-            {{ pool.latestStatus ? pool.latestStatus.pressure : '-' }}%
+            {{ pool.latestStatus ? pool.latestStatus.pressure.toFixed(2) : '-' }}%
           </div>
           <div class="pressure-status">
             <span
@@ -89,10 +89,10 @@ export default defineComponent({
     
     // 获取压力颜色
     const getPressureColor = (pressure) => {
-      if (pressure >= 80) return 'var(--red-500)'
-      if (pressure >= 60) return 'var(--amber-400)'
-      if (pressure >= 40) return 'var(--cyan-500)'
-      return 'var(--green-500)'
+      if (pressure >= 80) return 'var(--color-danger)'
+      if (pressure >= 60) return 'var(--color-warning)'
+      if (pressure >= 40) return 'var(--color-info)'
+      return 'var(--color-success)'
     }
     
     // 获取压力状态样式类

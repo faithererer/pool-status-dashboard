@@ -138,10 +138,10 @@ export default defineComponent({
     // 根据压力值计算颜色
     const pressureColor = computed(() => {
       const p = props.pressure
-      if (p >= 80) return 'var(--red-500)'
-      if (p >= 60) return 'var(--amber-400)'
-      if (p >= 40) return 'var(--cyan-500)'
-      return 'var(--green-500)'
+      if (p >= 80) return 'var(--color-danger)'
+      if (p >= 60) return 'var(--color-warning)'
+      if (p >= 40) return 'var(--color-info)'
+      return 'var(--color-success)'
     })
     
     // 计算刻度线

@@ -50,8 +50,11 @@ import {
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
+  TimeScale
 } from 'chart.js'
+import { format } from 'date-fns'
+import 'chartjs-adapter-date-fns';
 
 // 注册 Chart.js 组件
 Chart.register(
@@ -63,7 +66,8 @@ Chart.register(
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
+  TimeScale
 )
 
 export default defineComponent({
@@ -95,7 +99,7 @@ export default defineComponent({
     const chartCanvas = ref(null)
     const chartContainer = ref(null)
     let chartInstance = null
-    const selectedTimeRange = ref('24h')
+    const selectedTimeRange = ref('1h')
 
     
     // 时间范围选项
@@ -137,14 +141,15 @@ export default defineComponent({
           displayColors: true,
           callbacks: {
             title: (context) => {
-              return `时间: ${context[0].label}`
+              const timestamp = context[0].parsed.x
+              return `时间: ${format(new Date(timestamp), 'yyyy-MM-dd HH:mm:ss')}`
             },
             label: (context) => {
               const label = context.dataset.label || ''
               const value = context.parsed.y
               
               if (label.includes('压力')) {
-                return `${label}: ${value}%`
+                return `${label}: ${value.toFixed(2)}%`
               } else {
                 return `${label}: ${value.toLocaleString()}`
               }
@@ -154,6 +159,15 @@ export default defineComponent({
       },
       scales: {
         x: {
+          type: 'time',
+          time: {
+            unit: 'hour',
+            tooltipFormat: 'yyyy-MM-dd HH:mm:ss',
+            displayFormats: {
+              hour: 'HH:mm',
+              day: 'MM-dd',
+            }
+          },
           display: true,
           title: {
             display: true,
@@ -168,7 +182,10 @@ export default defineComponent({
             color: 'rgb(148, 163, 184)', // $gray-400
             font: {
               size: 11
-            }
+            },
+            source: 'auto',
+            maxRotation: 0,
+            autoSkip: true,
           },
           grid: {
             color: 'rgba(148, 163, 184, 0.1)', // $border-color
@@ -211,6 +228,8 @@ export default defineComponent({
           type: 'linear',
           display: true,
           position: 'right',
+          min: 0,
+          max: 100,
           title: {
             display: true,
             text: '压力(%)',
@@ -241,15 +260,30 @@ export default defineComponent({
           tension: 0.4
         },
         point: {
-          radius: 4,
-          hoverRadius: 6,
-          borderWidth: 2,
-          hoverBorderWidth: 3
+          radius: 2,
+          hoverRadius: 5,
+          borderWidth: 1,
+          hoverBorderWidth: 2
         }
       }
     })
     
     // 创建图表
+    const downsample = (data, maxPoints) => {
+      if (data.length <= maxPoints) {
+        return data
+      }
+
+      const sampledData = []
+      const step = (data.length - 1) / (maxPoints - 1)
+
+      for (let i = 0; i < maxPoints; i++) {
+        const index = Math.round(i * step)
+        sampledData.push(data[index])
+      }
+      return sampledData
+    }
+
     const createChart = () => {
       if (!chartCanvas.value || !props.data) return
       
@@ -260,9 +294,14 @@ export default defineComponent({
           chartInstance.destroy()
         }
         
+        const processedData = JSON.parse(JSON.stringify(props.data))
+        processedData.datasets.forEach(dataset => {
+          dataset.data = downsample(dataset.data, 500) // 抽样到500个点
+        })
+
         chartInstance = new Chart(ctx, {
           type: 'line',
-          data: props.data,
+          data: processedData,
           options: getChartOptions()
         })
       } catch (error) {

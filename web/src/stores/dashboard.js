@@ -74,10 +74,13 @@ export const useDashboardStore = defineStore('dashboard', () => {
         }, {})
 
         // 将最新状态合并到号池列表中
-        const enrichedPools = pools.map(pool => ({
-          ...pool,
-          latestStatus: statusMap[pool.id] || pool.latestStatus || null
-        }))
+        const enrichedPools = pools.map(pool => {
+          const latestStatus = statusMap[pool.id] || pool.latestStatus || null
+          return {
+            ...pool,
+            latestStatus
+          }
+        })
 
         publicPools.value = enrichedPools
 
@@ -146,7 +149,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
   }
 
   // 获取号池历史数据
-  const fetchPoolHistory = async (poolId, timeRange = '24h') => {
+  const fetchPoolHistory = async (poolId, timeRange = '1h') => {
     if (!poolId) return
     
     loading.value.history = true
@@ -199,42 +202,45 @@ export const useDashboardStore = defineStore('dashboard', () => {
   }
 
   // 转换历史数据为图表格式
-  const transformToChartData = (records, timeRange) => {
+  const transformToChartData = (records) => {
     if (!records || !Array.isArray(records) || records.length === 0) {
       return null
     }
-    const labels = records.map(record => formatTimeLabel(record.timestamp, timeRange))
-    
+
+    const sortedData = records.sort((a, b) => a.recordTime - b.recordTime)
+
     return {
-      labels,
       datasets: [
         {
           label: '有效数量',
-          data: records.map(r => r.validCount || 0),
+          data: sortedData.map(r => ({ x: r.recordTime, y: r.validCount || 0 })),
           borderColor: '#22c55e',
           backgroundColor: 'rgba(34, 197, 94, 0.1)',
           tension: 0.4,
-          fill: true
+          fill: true,
+          yAxisID: 'y'
         },
         {
           label: '无效数量',
-          data: records.map(r => r.invalidCount || 0),
+          data: sortedData.map(r => ({ x: r.recordTime, y: r.invalidCount || 0 })),
           borderColor: '#ef4444',
           backgroundColor: 'rgba(239, 68, 68, 0.1)',
           tension: 0.4,
-          fill: true
+          fill: true,
+          yAxisID: 'y'
         },
         {
           label: '冷却中数量',
-          data: records.map(r => r.coolingCount || 0),
+          data: sortedData.map(r => ({ x: r.recordTime, y: r.coolingCount || 0 })),
           borderColor: '#fbbf24',
           backgroundColor: 'rgba(251, 191, 36, 0.1)',
           tension: 0.4,
-          fill: true
+          fill: true,
+          yAxisID: 'y'
         },
         {
           label: '压力(%)',
-          data: records.map(r => r.pressure || 0),
+          data: sortedData.map(r => ({ x: r.recordTime, y: r.pressure || 0 })),
           borderColor: '#8b5cf6',
           backgroundColor: 'rgba(139, 92, 246, 0.1)',
           tension: 0.4,
